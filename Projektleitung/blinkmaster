@@ -1,0 +1,15 @@
+#!/bin/sh
+
+
+echo 0 > /sys/devices/gpio-leds.5/leds/vocore:green:status/brightness
+
+while true
+do
+
+echo 1 > /sys/devices/gpio-leds.5/leds/vocore:orange:eth/brightness
+
+sleep 1
+echo 0 > /sys/devices/gpio-leds.5/leds/vocore:orange:eth/brightness
+sleep 1 
+
+done
