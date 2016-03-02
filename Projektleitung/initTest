@@ -1,0 +1,17 @@
+#!/bin/sh /etc/rc.common
+
+START=100
+STOP=100
+
+boot () {
+
+bla=`cat /root/master`
+
+if [ "$bla" = "1" ]
+then
+	/root/blinkmaster &
+else
+	/root/blinkchild &
+fi
+}
+
