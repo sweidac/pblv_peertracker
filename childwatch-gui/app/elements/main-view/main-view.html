@@ -11,6 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
 <link rel="import" href="../child-data/child-data.html">
 
@@ -26,17 +27,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background-color: white;
         padding: 16px;
       }
+
+      .avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        margin-right: 16px;
+      }
+
+      .childname {
+        @apply(--paper-font-body2);
+      }
     </style>
     <child-data childs="{{childs}}"></child-data>
 
     <div class="layout vertical">
-    <template is="dom-repeat" items="{{childs}}">
-      <paper-material elevation="1" class="layout horizontal center">
-        <div class="flex">{{item.name}}</div>
-        <div>{{item.mac}}</div>
-        <div>{{item.img}}</div>
-      </paper-material>
-    </template>
+      <template is="dom-repeat" items="{{childs}}">
+        <paper-material elevation="1" class="layout horizontal center" on-tap="_navigate">
+          <iron-image class="avatar" sizing="cover" src$="{{item.img}}"></iron-image>
+          <div class="flex childname">{{item.name}}</div>
+          <div>{{item.mac}}</div>
+        </paper-material>
+      </template>
     </div>
   </template>
   <script>
@@ -47,11 +59,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         is: 'main-view',
 
         properties: {
-          foo: {
-            type: String,
-            value: 'main-view',
+          childs: {
+            type: Array,
             notify: true
           }
+        },
+
+        _navigate: function (e) {
+          page.show('/childs/' + e.model.get('item.mac'));
         }
       });
     })();
