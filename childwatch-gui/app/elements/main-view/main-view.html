@@ -13,6 +13,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
 <link rel="import" href="../child-data/child-data.html">
 
 <dom-module id="main-view">
@@ -26,6 +27,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         @apply(--paper-font-body1);
         background-color: white;
         padding: 16px;
+
+        cursor: pointer;
       }
 
       .avatar {
@@ -38,15 +41,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .childname {
         @apply(--paper-font-body2);
       }
+
+      iron-image {
+        background-color: lightgray;
+      }
+
+      .mac {
+        @apply(--paper-fond-code1);
+      }
+
+      .hint {
+        color: var(--secondary-text-color);
+      }
+
+      paper-slider {
+        width: 100%;
+      }
     </style>
     <child-data childs="{{childs}}"></child-data>
 
     <div class="layout vertical">
+
+      <div>Reichweite: </div>
+      <paper-slider pin min="0" max="10"></paper-slider>
+
       <template is="dom-repeat" items="{{childs}}">
         <paper-material elevation="1" class="layout horizontal center" on-tap="_navigate">
-          <iron-image class="avatar" sizing="cover" src$="{{item.img}}"></iron-image>
+          <iron-image class="avatar" sizing="cover" src="{{item.img}}"></iron-image>
+          <template is="dom-if" if="{{!item.name}}">
+            <div class="hint">bitte konfigurieren</div>
+          </template>
           <div class="flex childname">{{item.name}}</div>
-          <div>{{item.mac}}</div>
+          <div class="mac">{{item.mac}}</div>
         </paper-material>
       </template>
     </div>

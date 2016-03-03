@@ -28,12 +28,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     page('/', function() {
       app.route = 'home';
+      app.mac = null;
     });
 
     page('/childs/:mac', function(ctx) {
-      app.route = 'child';
-      console.log(ctx)
-      app.selectedmac = ctx.params.mac;
+      app.route = 'detail';
+      app.mac = ctx.params.mac;
     });
 
     page(app.baseUrl, function() {
