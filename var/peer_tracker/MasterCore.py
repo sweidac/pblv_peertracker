@@ -7,9 +7,10 @@ DB_FILEPATH = r'/var/peer_tracker/db'
 # Maximale Entfernung vom Master in Metern
 THRESHOLD = 20
 
+# is valid in a signal  range from -75dBm to -95 dBm
 def getDistance( signalStrength ):
-	# TODO do magic
-	return int(signalStrength) * -1 - 20
+	signalStrength = signalStrength * -1
+	return int(signalStrength) * 1.5 - 109
 
 try:
 	os.remove(DB_FILEPATH)
