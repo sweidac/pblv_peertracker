@@ -1,5 +1,0 @@
-Regex für Signalstärke:
-(?<=signal:).*(?=dBm)
-
-Regex für MAC von Client:
-(?<=Station).*(?=\(on.*\))
