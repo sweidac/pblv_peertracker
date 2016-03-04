@@ -18,8 +18,8 @@ except:
     pass
 
 open(DB_FILEPATH, 'a').close()
-WIFI_DEVICE_NAME = 'wlp1s0'
-#WIFI_DEVICE_NAME = 'wlan0-1'
+#WIFI_DEVICE_NAME = 'wlp1s0'
+WIFI_DEVICE_NAME = 'wlan0-1'
 
 while True:
 	out = check_output(["iw", "dev",  WIFI_DEVICE_NAME , "station", "dump"])
@@ -77,6 +77,7 @@ while True:
 				#subprocess.check_call( [ 'echo 1 > /sys/devices/gpio-leds.5/leds/vocore:orange:eth/brightness' ] )
 
 		newData = newData.rstrip()
+		newData = os.linesep.join([s for s in newData.splitlines() if s])
 		print("---")
 		print(newData)
 		print("---")
