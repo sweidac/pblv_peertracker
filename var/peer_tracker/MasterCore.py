@@ -4,11 +4,12 @@ import os
 import time
 
 DB_FILEPATH = r'/var/peer_tracker/db'
-THRESHOLD = -70
+# Maximale Entfernung vom Master in Metern
+THRESHOLD = 20
 
 def getDistance( signalStrength ):
-	# do some magic here
-	return int(signalStrength)
+	# TODO do magic
+	return int(signalStrength) * -1 - 20
 
 try:
 	os.remove(DB_FILEPATH)
@@ -24,45 +25,62 @@ while True:
 	out = check_output(["iw", "dev",  WIFI_DEVICE_NAME , "station", "dump"])
 	array = out.split("Station")
 
-	# Read current data
-	file = open(DB_FILEPATH, 'r+')
-	filecontent = []
-	filecontent = file.readlines()
-	file.close()
 
-	newData = ''
-	for station in array:
-		REGEX_MAC_ADDRESS = re.compile('(?<=^ ).*(?=\(on.*\))')
-		REGEX_SIGNAL = re.compile('(?<=signal:).*(?=dBm)')
+	with open(DB_FILEPATH, "r+") as file:
+		file.seek(0)
+		filecontent = []
+		filecontent = file.readlines()
 
-		stationMAC = REGEX_MAC_ADDRESS.search(station)
-		stationSignal = REGEX_SIGNAL.search(station)
+		# Save old Data to check for missing clients
+		dataDict = {}
+		for line in filecontent:
+			dataArray = line.split(',')
+			dataDict[dataArray[0]] = dataArray[2]
 
-		if(stationMAC is not None and stationSignal is not None):
-			mac = stationMAC.group(0).strip()
-			signal = stationSignal.group(0).strip()
+		newData = ''
+		for station in array:
+			REGEX_MAC_ADDRESS = re.compile('(?<=^ ).*(?=\(on.*\))')
+			REGEX_SIGNAL = re.compile('(?<=signal:).*(?=dBm)')
 
-			registeredClient=0
-			for line in filecontent:
-				lineData = line.split(',')
-				oldmac = lineData[0]
-				if(oldmac==mac):
-					registeredClient=lineData[2]
+			stationMAC = REGEX_MAC_ADDRESS.search(station)
+			stationSignal = REGEX_SIGNAL.search(station)
 
-			distance = getDistance(signal)
-			if(distance < THRESHOLD):
-				# let it beep
-				print('beep')
-			else:
-				print('everything alright!')
+			if(stationMAC is not None and stationSignal is not None):
+				mac = stationMAC.group(0).strip()
+				signal = stationSignal.group(0).strip()
 
-			stationRep = mac + "," + str(distance) + "," + str(registeredClient)
+				registeredClient=0
+				for line in filecontent:
+					lineData = line.split(',')
+					oldmac = lineData[0]
+					if(oldmac==mac):
+						# Copy registration state from DB
+						registeredClient=lineData[2]
+						# Client is still active
+						dataDict[mac] = -1
 
-			newData = newData + stationRep
+				distance = getDistance(signal)
+				if(distance > THRESHOLD):
+					#subprocess.check_call( [ 'echo 1 > /sys/devices/gpio-leds.5/leds/vocore:orange:eth/brightness' ] )
+					print('beep')
+				else:
+					#subprocess.check_call( [ 'echo 0 > /sys/devices/gpio-leds.5/leds/vocore:orange:eth/brightness' ] )
+					print('everything alright!')
 
-	file = open(DB_FILEPATH, 'w+')
-	print(newData)
-	file.write(newData)
-	file.close()
+				stationRep = mac + "," + str(distance) + "," + str(registeredClient) + "\n"
+				newData = newData + stationRep
 
-	time.sleep(3)
+		for key in dataDict:
+			if(dataDict[key] > 0):
+				missingStationRep = key + "," + str(-1) + "," + str(1) + "\n"
+				newData = newData + missingStationRep
+				#subprocess.check_call( [ 'echo 1 > /sys/devices/gpio-leds.5/leds/vocore:orange:eth/brightness' ] )
+
+		newData = newData.rstrip()
+		print("---")
+		print(newData)
+		print("---")
+		file.seek(0)
+		file.write(newData)
+
+	time.sleep(1)
