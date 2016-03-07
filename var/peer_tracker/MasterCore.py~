@@ -4,31 +4,13 @@ import os
 import time
 
 DB_FILEPATH = r'/var/peer_tracker/db'
-#
-TRUE = 1
-FALSE = 0
 # Maximale Entfernung vom Master in Metern
 THRESHOLD = 20
 
 # is valid in a signal  range from -75dBm to -95 dBm
-def isInRange( signalStrength ):
-	print("Signal:" + signalStrength)
-	if(signalStrength <= -75 and signalStrength >= -95):
-		signalStrength = signalStrength * -1
-		distance = int(signalStrength) * 1.5 - 109
-		print("Entfernung:" + distance)
-		if distance > THRESHOLD:
-			return 1
-		else:
-			return 0
-	elif signalStrength > -75:
-		return 1
-	elif signalStrength < -95:
-		return 0
-
-def notify():
-	#subprocess.check_call( [ 'echo 1 > /sys/devices/gpio-leds.5/leds/vocore:orange:eth/brightness' ] )
-	print('beep')
+def getDistance( signalStrength ):
+	signalStrength = signalStrength * -1
+	return int(signalStrength) * 1.5 - 109
 
 try:
 	os.remove(DB_FILEPATH)
@@ -37,12 +19,13 @@ except:
     pass
 
 open(DB_FILEPATH, 'a').close()
-WIFI_DEVICE_NAME = 'wlp1s0'
-#WIFI_DEVICE_NAME = 'wlan0-1'
+#WIFI_DEVICE_NAME = 'wlp1s0'
+WIFI_DEVICE_NAME = 'wlan0-1'
 
 while True:
 	out = check_output(["iw", "dev",  WIFI_DEVICE_NAME , "station", "dump"])
 	array = out.split("Station")
+
 
 	with open(DB_FILEPATH, "r+") as file:
 		file.seek(0)
@@ -52,8 +35,7 @@ while True:
 		# Save old Data to check for missing clients
 		dataDict = {}
 		for line in filecontent:
-			dataArray = line.split('|')
-			# Store MAC-ID as key and registration state as value
+			dataArray = line.split(',')
 			dataDict[dataArray[0]] = dataArray[2]
 
 		newData = ''
@@ -65,33 +47,35 @@ while True:
 			stationSignal = REGEX_SIGNAL.search(station)
 
 			if(stationMAC is not None and stationSignal is not None):
-				# Filter MAC and Signal Strength from output of iw command
 				mac = stationMAC.group(0).strip()
 				signal = stationSignal.group(0).strip()
 
 				registeredClient=0
 				for line in filecontent:
-					lineData = line.split('|')
+					lineData = line.split(',')
 					oldmac = lineData[0]
 					if(oldmac==mac):
 						# Copy registration state from DB
 						registeredClient=lineData[2]
 						# Client is still active
-						del dataDict[mac]
+						dataDict[mac] = -1
 
-				inRange = isInRange(signal)
-				if(inRange == 0):
-					notify()
+				distance = getDistance(signal)
+				if(distance > THRESHOLD):
+					#subprocess.check_call( [ 'echo 1 > /sys/devices/gpio-leds.5/leds/vocore:orange:eth/brightness' ] )
+					print('beep')
+				else:
+					#subprocess.check_call( [ 'echo 0 > /sys/devices/gpio-leds.5/leds/vocore:orange:eth/brightness' ] )
+					print('everything alright!')
 
-				stationRep = mac + "|" + str(inRange) + "|" + str(registeredClient) + "\n"
+				stationRep = mac + "," + str(distance) + "," + str(registeredClient) + "\n"
 				newData = newData + stationRep
 
-		# Iterate over non active clients
 		for key in dataDict:
-			missingStationRep = key + "|" + str(0) + "|" + dataDict[key] + "\n"
-			newData = newData + missingStationRep
-			if dataDict[key] == 1:
-				notify()
+			if(dataDict[key] > 0):
+				missingStationRep = key + "," + str(-1) + "," + str(1) + "\n"
+				newData = newData + missingStationRep
+				#subprocess.check_call( [ 'echo 1 > /sys/devices/gpio-leds.5/leds/vocore:orange:eth/brightness' ] )
 
 		newData = newData.rstrip()
 		newData = os.linesep.join([s for s in newData.splitlines() if s])
