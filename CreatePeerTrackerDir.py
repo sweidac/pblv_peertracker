@@ -1,4 +1,4 @@
 import os
-d = "/var/peer_tracker"
+d = "/etc/peer_tracker"
 if not os.path.exists(d):
 	os.makedirs(d)

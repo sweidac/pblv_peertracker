@@ -30,7 +30,7 @@ def ensure_dir(checkFile):
 
 def writeToFile(conf):
 
-	fileName = "/var/peer_tracker/localconfig"
+	fileName = "/etc/peer_tracker/localconfig"
 
 	ensure_dir(fileName)
 
