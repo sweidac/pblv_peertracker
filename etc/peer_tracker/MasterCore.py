@@ -3,10 +3,9 @@ import re
 import os
 import time
 
-DB_FILEPATH = r'/var/peer_tracker/db'
-#
-TRUE = 1
-FALSE = 0
+#DB_FILEPATH = r'/etc/peer_tracker/'
+DB_FILEPATH = r'/home/fabian/Dokumente/pblv_peertracker/etc/peer_tracker/'
+
 # Maximale Entfernung vom Master in Metern
 THRESHOLD = 20
 
@@ -31,20 +30,20 @@ def notify():
 	print('beep')
 
 try:
-	os.remove(DB_FILEPATH)
-	os.makedirs(r'/var/peer_tracker')
+	os.remove(DB_FILEPATH + "db")
+	os.makedirs(DB_FILEPATH)
 except:
     pass
 
-open(DB_FILEPATH, 'a').close()
-WIFI_DEVICE_NAME = 'wlp1s0'
+open(DB_FILEPATH + "db", 'a').close()
+#WIFI_DEVICE_NAME = 'wlp1s0'
 #WIFI_DEVICE_NAME = 'wlan0-1'
 
 while True:
 	out = check_output(["iw", "dev",  WIFI_DEVICE_NAME , "station", "dump"])
 	array = out.split("Station")
 
-	with open(DB_FILEPATH, "r+") as file:
+	with open(DB_FILEPATH + "db", "r+") as file:
 		file.seek(0)
 		filecontent = []
 		filecontent = file.readlines()
