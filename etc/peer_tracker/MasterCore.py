@@ -5,13 +5,13 @@ import time
 
 #DB_FILEPATH = r'/etc/peer_tracker/'
 DB_FILEPATH = r'/home/fabian/Dokumente/pblv_peertracker/etc/peer_tracker/'
+MAX_INACTIVE_TIME = 5000
 
 # Maximale Entfernung vom Master in Metern
 THRESHOLD = 20
 
 # is valid in a signal  range from -75dBm to -95 dBm
 def isInRange( signalStrength ):
-	print("Signal:" + signalStrength)
 	if(signalStrength <= -75 and signalStrength >= -95):
 		signalStrength = signalStrength * -1
 		distance = int(signalStrength) * 1.5 - 109
@@ -36,7 +36,7 @@ except:
     pass
 
 open(DB_FILEPATH + "db", 'a').close()
-#WIFI_DEVICE_NAME = 'wlp1s0'
+WIFI_DEVICE_NAME = 'wlp1s0'
 #WIFI_DEVICE_NAME = 'wlan0-1'
 
 while True:
@@ -59,14 +59,20 @@ while True:
 		for station in array:
 			REGEX_MAC_ADDRESS = re.compile('(?<=^ ).*(?=\(on.*\))')
 			REGEX_SIGNAL = re.compile('(?<=signal:).*(?=dBm)')
+			REGEX_INACTIVE_TIME = re.compile('(?<=inactive time:).*(?=ms)')
 
 			stationMAC = REGEX_MAC_ADDRESS.search(station)
 			stationSignal = REGEX_SIGNAL.search(station)
+			stationInactive = REGEX_INACTIVE_TIME.search(station)
 
 			if(stationMAC is not None and stationSignal is not None):
 				# Filter MAC and Signal Strength from output of iw command
 				mac = stationMAC.group(0).strip()
 				signal = stationSignal.group(0).strip()
+				#inactiveTime = stationInactive.group(0).strip()
+				inactiveTime = '1234';
+
+				print("Station: " + mac + " | Signal: " + signal + " | Inactive Time: " + inactiveTime)
 
 				registeredClient=0
 				for line in filecontent:
@@ -78,9 +84,12 @@ while True:
 						# Client is still active
 						del dataDict[mac]
 
-				inRange = isInRange(signal)
-				if(inRange == 0):
-					notify()
+				if(int(inactiveTime) < MAX_INACTIVE_TIME):
+					inRange = isInRange(signal)
+					if(inRange == 0):
+						notify()
+				else:
+					inRange = 0
 
 				stationRep = mac + "|" + str(inRange) + "|" + str(registeredClient) + "\n"
 				newData = newData + stationRep
