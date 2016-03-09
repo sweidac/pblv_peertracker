@@ -3,12 +3,15 @@ import re
 import os
 import time
 
-#DB_FILEPATH = r'/etc/peer_tracker/'
-DB_FILEPATH = r'/home/fabian/Dokumente/pblv_peertracker/etc/peer_tracker/'
+DB_FILEPATH = r'/peer_tracker/'
+
+# Maximum inactive time of a client before it is marked as missing
 MAX_INACTIVE_TIME = 5000
 
-# Maximale Entfernung vom Master in Metern
-THRESHOLD = 20
+# Maximal distance of a child to master
+# min = 2m and max = 30m
+# default 10m
+DISTANCE = 10
 
 # is valid in a signal  range from -75dBm to -95 dBm
 def isInRange( signalStrength ):
@@ -16,7 +19,7 @@ def isInRange( signalStrength ):
 		signalStrength = signalStrength * -1
 		distance = int(signalStrength) * 1.5 - 109
 		print("Entfernung:" + distance)
-		if distance > THRESHOLD:
+		if distance > DISTANCE:
 			return 1
 		else:
 			return 0
@@ -36,25 +39,32 @@ except:
     pass
 
 open(DB_FILEPATH + "db", 'a').close()
-WIFI_DEVICE_NAME = 'wlp1s0'
-#WIFI_DEVICE_NAME = 'wlan0-1'
 
 while True:
-	out = check_output(["iw", "dev",  WIFI_DEVICE_NAME , "station", "dump"])
+	out = check_output(["iw", "dev", "wlan0" , "station",  "dump"])
+
+	# Get Information of each station
 	array = out.split("Station")
 
+	# load currently configured DISTANCE-value from file
+	with open(DB_FILEPATH + "distance", "r") as file:
+		DISTANCE = int(file.readline())
+		print(str(DISTANCE))
+
+	# open database and run the checks
 	with open(DB_FILEPATH + "db", "r+") as file:
 		file.seek(0)
 		filecontent = []
 		filecontent = file.readlines()
 
-		# Save old Data to check for missing clients
+		# Save old Data to check for missing and new clients
 		dataDict = {}
 		for line in filecontent:
 			dataArray = line.split('|')
 			# Store MAC-ID as key and registration state as value
 			dataDict[dataArray[0]] = dataArray[2]
 
+		# create the new data for the database
 		newData = ''
 		for station in array:
 			REGEX_MAC_ADDRESS = re.compile('(?<=^ ).*(?=\(on.*\))')
@@ -69,29 +79,36 @@ while True:
 				# Filter MAC and Signal Strength from output of iw command
 				mac = stationMAC.group(0).strip()
 				signal = stationSignal.group(0).strip()
-				#inactiveTime = stationInactive.group(0).strip()
-				inactiveTime = '1234';
 
-				print("Station: " + mac + " | Signal: " + signal + " | Inactive Time: " + inactiveTime)
+				if stationInactive is not None:
+					inactiveTime = int(stationInactive.group(0).strip())
+				else:
+					inactiveTime = 0
 
-				registeredClient=0
+				# debug output
+				print("Station: " + mac + " | Signal: " + signal + " | Inactive Time: " + str(inactiveTime))
+
+				# check if station was already in database
+				isNewClient = 1
 				for line in filecontent:
 					lineData = line.split('|')
 					oldmac = lineData[0]
 					if(oldmac==mac):
 						# Copy registration state from DB
-						registeredClient=lineData[2]
+						isNewClient=lineData[2]
 						# Client is still active
 						del dataDict[mac]
 
-				if(int(inactiveTime) < MAX_INACTIVE_TIME):
+				# check if client is in range, but only if inactiveTime is under 5 seconds
+				if(inactiveTime < MAX_INACTIVE_TIME):
 					inRange = isInRange(signal)
 					if(inRange == 0):
 						notify()
 				else:
 					inRange = 0
 
-				stationRep = mac + "|" + str(inRange) + "|" + str(registeredClient) + "\n"
+				# build string representation of a station in database
+				stationRep = mac + "|" + str(inRange) + "|" + str(isNewClient) + "\n"
 				newData = newData + stationRep
 
 		# Iterate over non active clients
@@ -101,11 +118,13 @@ while True:
 			if dataDict[key] == 1:
 				notify()
 
+		# remove blank lines
 		newData = newData.rstrip()
 		newData = os.linesep.join([s for s in newData.splitlines() if s])
 		print("---")
 		print(newData)
 		print("---")
+		# goto first line and start writing
 		file.seek(0)
 		file.write(newData)
 
