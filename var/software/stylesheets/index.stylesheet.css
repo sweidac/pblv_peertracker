@@ -1,0 +1,75 @@
+body {
+	font-size: 18px;	
+}
+
+.content_container {
+
+    margin-top:     90px;
+    padding:        0px;
+
+}
+
+@media (max-width: 991px) {
+
+    .content_container {
+
+        margin:         90px 20px 20px 20px;
+
+    }
+
+}
+
+.client_item {
+
+    border:         1px solid #999;
+    display:        flex;
+    margin-bottom:  10px;
+    min-height:     100px;
+
+}
+
+.img-rounded {
+
+    height:         80px;
+    width:          80px;
+    margin:         10px;
+    border:         1px solid #999;
+    background-position: center center;
+    background-size: cover;
+
+}
+
+h1 {
+
+    margin:         25px 0px 0px 10px;
+    flex-grow:      1;
+
+}
+
+.client_item_name {
+
+    font-weight:    bold;
+    font-size:      25px;
+    margin:         0px 0px 0px 0px;
+    position:       relative;
+    flex-grow:      1;
+
+}
+
+.client_item_name > small {
+
+	width: 100%;
+    font-weight:    normal;
+    font-size:      45%;
+    position:       absolute;
+    right:          10px;
+    bottom:         10px;
+
+}
+
+button {
+
+    height: 50px;
+    margin: 25px 10px 0px 10px;
+
+}
