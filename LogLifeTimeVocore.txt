@@ -1,0 +1,11 @@
+Connected!
+Disconnected!
+Connected Time: 8:24:16
+ 
+Connected!
+Disconnected!
+Connected Time: 1:35:41
+ 
+Program ended. Waited 5 min for a reconnect.
+ 
+Complete connected time: 9:59:57
