@@ -9,9 +9,6 @@ app.controller ('index_ctrl', function ($scope, $http, $location, $browser) {
         //get client-list
         $http.get ('rest/clients').success (function (client_list) {
 
-            //parse list
-            client_list = angular.fromJson (client_list);
-
             //generate list
             $scope.client_list = [];
 

@@ -10,11 +10,17 @@ else
 $client_list = array ();
 
 //open and read client-list
-if (file_exists (Controller::$csv_file))
-    if (($handle = fopen (Controller::$csv_file, "r")) !== false)
+if (file_exists (Controller::$csv_file_linux))
+    $db_file = Controller::$csv_file_linux;
+else
+    $db_file = Controller::$csv_file_windows_1;
+
+if (file_exists ($db_file))
+    if (($handle = fopen ($db_file, "r")) !== false)
         while (($data = fgetcsv ($handle, 1000, "|")) !== false) {
 
-            $id         = $data[0];
+            $id         = substr (str_replace (':', '', $data[0]), -4);;
+            $image_id   = $id;
             $distance   = $data[1];
             $name       = null;
             $image      = null;
@@ -24,11 +30,11 @@ if (file_exists (Controller::$csv_file))
                 continue;
 
             //check image
-            foreach (glob ('../../'.Controller::$image_path.'/'.$id.'_*.*') as $file)
+            foreach (glob ('../../'.Controller::$image_path.'/'.$image_id.'_*.*') as $file)
                 if ($file != null) {
 
                     $name   = explode ('_', substr ($file, 0, -4))[1];
-		    $phone   = explode ('_', substr ($file, 0, -4))[2];
+                    $phone  = explode ('_', substr ($file, 0, -4))[2];
                     $image  = explode ('/', $file);
                     $image  = $image[count ($image) - 1];
 

@@ -11,18 +11,23 @@ if ($_GET['option'] == 'delete') {
     //set new-state
     $new_data_array = [];
 
-    if (file_exists (Controller::$csv_file))
-        if (($handle = fopen (Controller::$csv_file, "r")) !== false) {
+    if (file_exists (Controller::$csv_file_linux))
+        $db_file = Controller::$csv_file_linux;
+    else
+        $db_file = Controller::$csv_file_windows_2;
+
+    if (file_exists ($db_file))
+        if (($handle = fopen ($db_file, "r")) !== false) {
 
             while (($data = fgetcsv ($handle, 1000, "|")) !== false) {
 
-                $client_id  = $data[0];
+                $client_id  = substr (str_replace (':', '', $data[0]), -4);
                 $distance   = $data[1];
                 $new        = $data[2];
 
                 if ($client_id == $id)
                     if ($new == '0')
-                        $new = 1;
+                        $new = '1';
                     else
                         if ($new == 'false')
                             $new = 'true';
@@ -35,12 +40,27 @@ if ($_GET['option'] == 'delete') {
 
         }
 
-    $handle = fopen (Controller::$csv_file, 'w');
+    if (file_exists ($db_file))
+        if (($handle = fopen ($db_file, "w")) !== false) {
 
-    foreach ($new_data_array as $line)
-        fputcsv ($handle, $line, "|");
+            foreach ($new_data_array as $line)
+                fputcsv ($handle, $line, "|");
 
-    fclose ($handle);
+            fclose ($handle);
+
+        }
+
+}
+
+if ($_POST['option'] == 'save_distance') {
+
+    if (file_exists (Controller::$distance_file_linux))
+        $distance_file = Controller::$distance_file_linux;
+    else
+        $distance_file = Controller::$distance_file_windows_2;
+
+
+    file_put_contents ($distance_file, $_POST['distance']);
 
 }
 
