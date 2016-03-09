@@ -1,13 +1,13 @@
 #!/bin/sh
 
-peertrackerDir="/peertracker"
+tempDir="/peertrackerDependencies"
 
-touch $peertrackerDir/installLog
-for f in $peertrackerDir/dependencies/*.ipk
+touch $tempDir/installLog
+for f in $tempDir/dependencies/*.ipk
 do
 	echo "installing $f"
-	opkg install --force-depends $f >> $peertrackerDir/installLog 
+	opkg install --force-depends $f >> $tempDir/installLog
+	rm $f
+	echo "deleted $f" >> $tempDir/installLog 
 done
 
-echo "deleting ipk files" >> $peertrackerDir/installLog
-rm -r $peertrackerDir/dependencies

@@ -1,12 +1,20 @@
-#!/bin/sh
+#!/bin/bash
 
-peertrackerDir="/peertracker"
+source ../vocore.sh
 
-sshpass -p 'vocore' ssh -o StrictHostKeyChecking=no root@192.168.61.1 "mkdir -p $peertrackerDir"
+tempDir="/peertrackerDependencies"
+
+vocoreSsh "mkdir -p $tempDir"
 echo "Verzeichnisse auf Vocore erzeugt"
-sshpass -p 'vocore' scp -o StrictHostKeyChecking=no -r dependencies root@192.168.61.1:$peertrackerDir
-sshpass -p 'vocore' scp -o StrictHostKeyChecking=no -r installSkripte root@192.168.61.1:$peertrackerDir
+echo "Packages werden auf Vocore übertragen"
+#vocoreScp  dependencies $tempDir
+vocoreScp installSkripte $tempDir
 echo "Packages auf Vocore übertragen"
-sshpass -p 'vocore' ssh -o StrictHostKeyChecking=no root@192.168.61.1 chmod 577 $peertrackerDir/installSkripte/opkgInstallAll.sh
-sshpass -p 'vocore' ssh -o StrictHostKeyChecking=no root@192.168.61.1 $peertrackerDir/installSkripte/opkgInstallAll.sh
+echo "Installationsskript wird gestartet"
+vocoreSsh "chmod 577 $tempDir/installSkripte/opkgInstallAll.sh"
+vocoreSsh "$tempDir/installSkripte/opkgInstallAll.sh"
 echo "Installationsskript gelaufen"
+
+
+
+
