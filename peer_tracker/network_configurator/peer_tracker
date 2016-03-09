@@ -1,0 +1,20 @@
+#!/bin/sh /etc/rc.common
+# Example script
+# Copyright (C) 2007 OpenWrt.org
+ 
+START=99
+STOP=2
+ 
+
+start() 
+{	
+	echo "start peer_tracker"
+	/bin/ash /peertracker/init.sh&
+}
+
+
+stop() 
+{	
+	echo "stop peer_tracker"
+}
+

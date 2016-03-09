@@ -1,0 +1,35 @@
+#child
+
+config interface 'loopback'
+	option ifname 'lo'
+	option proto 'static'
+	option ipaddr '127.0.0.1'
+	option netmask '255.0.0.0'
+
+config globals 'globals'
+	option ula_prefix 'fd36:f1f7:f04b::/48'
+
+config interface 'lan'
+	option ifname 'eth0.1'
+	option force_link '1'
+	option type 'bridge'
+	option proto 'static'
+	option ipaddr '192.168.61.1'
+	option netmask '255.255.255.0'
+	option ip6assign '60'
+	option macaddr 'b8:d8:12:66:18:8a'
+
+config switch
+	option name 'switch0'
+	option reset '1'
+	option enable_vlan '1'
+
+config switch_vlan
+	option device 'switch0'
+	option vlan '1'
+	option ports '0 4 6t'
+
+config interface 'wwan'
+	option proto 'dhcp'
+
+
