@@ -16,6 +16,9 @@ public class LogWlanTime
 {
 	static long startTimeDisconnect;
 	static long durationDisconnect = 0;
+	static long completeHour =0;
+	static long completeMin=0;
+	static long completeSec=0;
 	static PrintWriter writer;
 	
 	public static void main(String args[]) throws IOException{
@@ -28,8 +31,11 @@ public class LogWlanTime
 			checkConnection();
 			durationDisconnect = (System.currentTimeMillis() - startTimeDisconnect)/1000;
 		}
-		System.out.println("Program ended. Waited 5 min for a reconnect.");
+		System.out.println("Program ended. Waited 5 min for a reconnect. \n");
+		System.out.println("Complete connected time: " + completeHour +":" + completeMin+":"+completeSec);
 		writer.println("Program ended. Waited 5 min for a reconnect.");
+		writer.println(" ");
+		writer.println("Complete connected time: " + completeHour +":" + completeMin+":"+completeSec);
 		writer.close();
 	}
 	
@@ -50,6 +56,7 @@ public class LogWlanTime
 		{
 			if(startTimeConnection == 0){
 				System.out.println("Connected!");
+				System.out.println("Time disconnect: " + durationDisconnect);
 				writer.println("Connected!");
 				startTimeConnection = System.currentTimeMillis();  
 			}
@@ -89,6 +96,9 @@ public class LogWlanTime
 			writer.println("Connected Time: " + hours +":" + minutes+":"+seconds);
 			writer.println(" ");
 			
+			completeHour+=hours;
+			completeMin+=minutes;
+			completeSec+=seconds;
 			
 			startTimeDisconnect = currentTime;
 		}
