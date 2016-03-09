@@ -96,7 +96,7 @@ copy_file()
 is_master()
 {
 
-	python $usb_detection_path > /dev/null 2>&1 &
+	python $usb_detection_path
 
 	file_content=`cat $local_config_path`
 
