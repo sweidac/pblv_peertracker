@@ -5,7 +5,7 @@ class Controller {
     //variables
 
     //variables
-    public static $csv_file     = '/opt/peer_tracker/db';
+    public static $csv_file     = '/test.txt';
     public static $image_path   = 'images';
 
     /**
