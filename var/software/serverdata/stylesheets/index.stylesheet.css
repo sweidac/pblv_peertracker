@@ -58,18 +58,30 @@ h1 {
 
 .client_item_name > small {
 
-	width: 100%;
     font-weight:    normal;
-    font-size:      45%;
+    font-size:      50%;
     position:       absolute;
-    right:          10px;
+    left:           0px;
     bottom:         10px;
 
 }
 
-button {
+.client_item_name > small > a {
+
+    font-size:      110%;
+    font-weight:    bold;
+
+}
+
+.client_item > button {
 
     height: 50px;
     margin: 25px 10px 0px 10px;
+
+}
+
+.distance_container {
+
+    margin-bottom: -50px;
 
 }
