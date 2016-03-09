@@ -2,6 +2,8 @@ from subprocess import check_output
 import re
 import os
 import time
+import thread
+import VocoreSound
 
 DB_FILEPATH = r'/peer_tracker/'
 
@@ -29,8 +31,10 @@ def isInRange( signalStrength ):
 		return 0
 
 def notify():
-	#subprocess.check_call( [ 'echo 1 > /sys/devices/gpio-leds.5/leds/vocore:orange:eth/brightness' ] )
 	print('beep')
+	VocoreSound.signalOn()
+	time.sleep(1)
+	VocoreSound.signalOff()
 
 try:
 	os.remove(DB_FILEPATH + "db")
@@ -99,11 +103,12 @@ while True:
 						# Client is still active
 						del dataDict[mac]
 
+				thread.start_new_thread(notify, ())
 				# check if client is in range, but only if inactiveTime is under 5 seconds
 				if(inactiveTime < MAX_INACTIVE_TIME):
 					inRange = isInRange(signal)
 					if(inRange == 0):
-						notify()
+						thread.start_new_thread(notify, ())
 				else:
 					inRange = 0
 
@@ -116,7 +121,7 @@ while True:
 			missingStationRep = key + "|" + str(0) + "|" + dataDict[key] + "\n"
 			newData = newData + missingStationRep
 			if dataDict[key] == 1:
-				notify()
+				thread.start_new_thread(notify, ())
 
 		# remove blank lines
 		newData = newData.rstrip()
