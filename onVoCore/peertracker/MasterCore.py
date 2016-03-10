@@ -108,7 +108,7 @@ while True:
 				else:
 					inRange = 0
 
-				if(inRange == 0 && isNewClient == 0):
+				if(inRange == 0 and isNewClient == 0):
 					thread.start_new_thread(notify, ())
 
 				# build string representation of a station in database
