@@ -5,6 +5,7 @@ error_reporting(-1);
 
 include 'rest/Controller.class.php';
 
+
 //ADD Client
 
 if ($_POST['option'] == 'add') {
@@ -16,6 +17,10 @@ if ($_POST['option'] == 'add') {
 
     $image_name         = $id.'_'.$name.'_'.$phone.'.jpeg';
     $image_path         = Controller::$image_path.'/'.$image_name;
+
+	//if (!file_exisits(Controller::$image_path){
+	//	mkdir(Controller::$image_path , 0777, true);
+	//}
 
     //remove old image/
 	foreach (glob (Controller::$image_path.'/'.$id.'_*_*.*') as $file)
