@@ -28,7 +28,7 @@
         </div>
     </nav>
 
-    <div class="content_container panel panel-default col-md-4 col-md-offset-4">
+    <div class="content_container panel panel-default col-xs-12 col-sm-12 col-md-4 col-md-offset-4">
 
         <div class="panel-heading">CLIENT [ present: <strong>{{ client.distance == 0 ? 'LOST' : 'OK' }}</strong> ]</div>
 
