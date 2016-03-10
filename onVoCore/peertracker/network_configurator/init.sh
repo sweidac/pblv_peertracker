@@ -50,12 +50,12 @@ init_master()
 	echo "module switched to master"
 	if [ -e "$master_script_path" ]
 	then
-
+		sleep 10
 		echo "starting master script"
-		python $master_script_path &
+		python $master_script_path >> /dev/null 2>&1 &
 		
 		echo "starting server application"
-		$server_application_path start &
+		$server_application_path start >> /dev/null 2>&1 &
 
 	fi
 
