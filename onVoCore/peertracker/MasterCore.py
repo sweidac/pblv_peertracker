@@ -5,7 +5,7 @@ import time
 import thread
 import VocoreSound
 
-DB_FILEPATH = r'/peer_tracker/'
+DB_FILEPATH = r'/peertracker/'
 
 # Maximum inactive time of a client before it is marked as missing
 MAX_INACTIVE_TIME = 5000
@@ -53,7 +53,6 @@ while True:
 	# load currently configured DISTANCE-value from file
 	with open(DB_FILEPATH + "distance", "r") as file:
 		DISTANCE = int(file.readline())
-		print(str(DISTANCE))
 
 	# open database and run the checks
 	with open(DB_FILEPATH + "db", "r+") as file:
@@ -103,7 +102,6 @@ while True:
 						# Client is still active
 						del dataDict[mac]
 
-				thread.start_new_thread(notify, ())
 				# check if client is in range, but only if inactiveTime is under 5 seconds
 				if(inactiveTime < MAX_INACTIVE_TIME):
 					inRange = isInRange(signal)
