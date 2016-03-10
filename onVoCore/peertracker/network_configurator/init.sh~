@@ -8,7 +8,8 @@
 usb_detection_path=/peertracker/UsbDetection.py
 
 #This is the path to the master script
-master_script_path=/peertracker/MasterCore.py
+#master_script_path=/var/peer_tracker/MasterCore.py
+master_script_path=/peertracker/dummy.py
 
 #This is the path where the config files for the master and child module are stored
 config_source_path=/peertracker
