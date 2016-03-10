@@ -105,10 +105,11 @@ while True:
 				# check if client is in range, but only if inactiveTime is under 5 seconds
 				if(inactiveTime < MAX_INACTIVE_TIME):
 					inRange = isInRange(signal)
-					if(inRange == 0):
-						thread.start_new_thread(notify, ())
 				else:
 					inRange = 0
+
+				if(inRange == 0 and isNewClient == 0):
+					thread.start_new_thread(notify, ())
 
 				# build string representation of a station in database
 				stationRep = mac + "|" + str(inRange) + "|" + str(isNewClient) + "\n"

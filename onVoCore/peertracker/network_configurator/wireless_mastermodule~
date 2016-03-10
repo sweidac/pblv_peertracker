@@ -13,8 +13,7 @@ config wifi-iface
 	option device 'radio0'
 	option network 'lan'
 	option mode 'ap'
-	option encryption 'psk2'
-	option key 'password'
+	option encryption 'none'
 	option ssid 'PBLV_master'
 
 

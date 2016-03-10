@@ -11,8 +11,7 @@ config wifi-device 'radio0'
 
 config wifi-iface
 	option ssid 'PBLV_master'
-	option encryption 'psk2'
-	option password 'password'
+	option encryption 'none'
 	option device 'radio0'
 	option mode 'sta'
 	option network 'wwan'

@@ -9,7 +9,7 @@ STOP=2
 start() 
 {	
 	echo "start peer_tracker"
-	/bin/ash /peertracker/init.sh&
+	/bin/ash /peertracker/network_configurator/init.sh&
 }
 
 
