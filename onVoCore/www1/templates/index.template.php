@@ -27,7 +27,7 @@
         </div>
     </nav>
 
-    <div class="content_container distance_container panel panel-default col-md-4 col-md-offset-4">
+    <div class="content_container distance_container panel panel-default col-xs-12 col-sm-12 col-md-4 col-md-offset-4">
 
         <div class="panel-heading">SET DISTANCE</div>
 
@@ -50,7 +50,7 @@
 
     </div>
 
-    <div class="content_container panel panel-default col-md-4 col-md-offset-4">
+    <div class="content_container panel panel-default col-xs-12 col-sm-12 col-md-4 col-md-offset-4">
 
         <div class="panel-heading">CLIENT-LIST</div>
 
