@@ -52,10 +52,10 @@ init_master()
 	then
 
 		echo "starting master script"
-		python $master_script_path > /dev/null 2>&1 &
+		python $master_script_path &
 		
 		echo "starting server application"
-		$server_application_path start > /dev/null 2>&1 &
+		$server_application_path start &
 
 	fi
 
