@@ -47,7 +47,7 @@ if ($_POST['option'] == 'add') {
             if (($handle = fopen ($db_file, "r")) !== false) {
 
                 while (($data = fgetcsv ($handle, 1000, "|")) !== false) {
-
+		    $client_id_compl= $data[0];
                     $client_id  = substr (str_replace (':', '', $data[0]), -4);;
                     $distance   = $data[1];
                     $new        = $data[2];
@@ -59,7 +59,7 @@ if ($_POST['option'] == 'add') {
                         if ($new == 'true')
                             $new = 'false';
 
-                    $new_data_array[] = array ($client_id, $distance, $new);
+                    $new_data_array[] = array ($client_id_compl, $distance, $new);
 
                 }
 
