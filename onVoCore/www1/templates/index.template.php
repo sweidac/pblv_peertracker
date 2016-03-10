@@ -5,7 +5,7 @@
 <head>
 
     <title>Child-Tracker</title>
-
+	<meta charset="utf-8">
     <link rel="stylesheet" href="include/bootstrap.min.css">
 
     <link rel="stylesheet" href="stylesheets/index.stylesheet.css">
@@ -18,7 +18,7 @@
     ng-init="init ()">
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
+        <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand" href="index.php">Child-Tracker</a>
             </div>
@@ -26,31 +26,51 @@
             </div>
         </div>
     </nav>
-
-    <div class="content_container distance_container panel panel-default col-xs-12 col-sm-12 col-md-4 col-md-offset-4">
+    
+    <div class="row hidden-md hidden-lg" style="padding-top: 40px; padding-left: 15px;">
+    	<div class="page-header">
+  			<h1>Willkommen zur ChildTracker Konfiguration
+  				<small>Hier können Sie die Child-Module personalisieren</small>
+  			</h1>
+		</div>
+	</div>
+    
+    <div class="row">
+    	<div class="col-md-12 col-lg-12  hidden-sm hidden-xs">
+    		<div class="jumbotron" style="background-color: #D5EDF5;">
+  				<h1>Willkommen zur ChildTracker Konfiguration</h1>
+  				<p style="padding-left:11px;"><small>Hier können Sie die Child-Module personalisieren</small></p>
+  			</div>
+  		</div>
+	</div>
+	
+    </div>
+    <div class=row>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
+   	 <div class="panel panel-default">
 
         <div class="panel-heading">SET DISTANCE</div>
 
         <div class="panel-body">
-
             <form id="client_form" action="index.php" method="POST" enctype="multipart/form-data">
 
                 <input type="hidden" class="form-control" name="option" value="save_distance">
 
                 <div class="input-group">
-                    <input type="number" name="distance" class="form-control" placeholder="max. distance" max="30" min="2">
+                    <input type="number" name="distance" class="form-control" placeholder="max. distance" max="30" min="2" value="<? echo $_POST['distance']; ?>">
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="submit">ok</button>
                     </span>
                 </div>
-
             </form>
-
         </div>
-
+    	</div>
+    	</div>
     </div>
 
-    <div class="content_container panel panel-default col-xs-12 col-sm-12 col-md-4 col-md-offset-4">
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
+    		<div class="panel panel-default">
 
         <div class="panel-heading">CLIENT-LIST</div>
 
@@ -115,6 +135,8 @@
 
         </div>
 
+    </div>
+    	</div>
     </div>
 
     <script src="include/jquery-2.2.1.min.js"></script>

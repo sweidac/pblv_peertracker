@@ -5,7 +5,7 @@ error_reporting(-1);
 
 include 'rest/Controller.class.php';
 
-//ADD
+//ADD Client
 
 if ($_POST['option'] == 'add') {
 

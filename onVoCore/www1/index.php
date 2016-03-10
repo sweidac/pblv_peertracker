@@ -2,6 +2,18 @@
 
 include 'rest/Controller.class.php';
 
+if (empty ($_POST['distance'])) {
+
+    if (file_exists (Controller::$distance_file_linux))
+        $distance_file = Controller::$distance_file_linux;
+    else
+        $distance_file = Controller::$distance_file_windows_2;
+
+    if (file_exists ($distance_file))
+        $_POST['distance'] = file_get_contents ($distance_file);
+
+}
+
 //DELETE
 
 if ($_GET['option'] == 'delete') {
