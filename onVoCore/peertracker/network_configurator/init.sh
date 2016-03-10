@@ -5,13 +5,13 @@
 ######################################################################################################################
 
 #This is the path to the Usb Detection script
-usb_detection_path=/peertracker/UsbDetection.py
+usb_detection_path=/peertracker/network_configurator/UsbDetection.py
 
 #This is the path to the master script
 master_script_path=/peertracker/MasterCore.py
 
 #This is the path where the config files for the master and child module are stored
-config_source_path=/peertracker
+config_source_path=/peertracker/network_configurator
 
 #This is the path where the config file of the current module should be placed
 config_destination_path=/etc/config
