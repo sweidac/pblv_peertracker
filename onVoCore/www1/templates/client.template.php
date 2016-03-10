@@ -19,7 +19,7 @@
     ng-init="init ('<? echo $_GET['client_id']; ?>')">
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
+        <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand" href="index.php">Child-Tracker</a>
             </div>
@@ -51,7 +51,7 @@
                 </div>
 		        <div class="form-group">
                     <label for="client_phone_input">Phone No.</label>
-                    <input type="text" class="form-control" name="phone" id="client_phone_input" placeholder="Phone No."
+                    <input type="number" class="form-control" name="phone" id="client_phone_input" placeholder="Phone No."
                            ng-value="client.phone">
                 </div>
                 <div class="form-group">
