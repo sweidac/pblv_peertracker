@@ -25,9 +25,9 @@ app.controller ('index_ctrl', function ($scope, $http, $location, $browser) {
 
     };
 
-    $scope.delete_client = function (image) {
+    $scope.delete_client = function (image, client_id) {
 
-        location.href = 'index.php?option=delete&image=' + image;
+        location.href = 'index.php?option=delete&image=' + image + '&client_id=' + client_id;
 
     };
 

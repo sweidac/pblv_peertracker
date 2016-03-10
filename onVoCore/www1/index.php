@@ -18,6 +18,7 @@ if (empty ($_POST['distance'])) {
 
 if ($_GET['option'] == 'delete') {
 
+    $id = $_GET['client_id'];
     unlink (Controller::$image_path.'/'.$_GET['image']);
 
     //set new-state
@@ -33,17 +34,14 @@ if ($_GET['option'] == 'delete') {
 
             while (($data = fgetcsv ($handle, 1000, "|")) !== false) {
 
-                $client_id  = substr (str_replace (':', '', $data[0]), -4);
+                $client_id  = $data[0];
                 $distance   = $data[1];
                 $new        = $data[2];
 
                 if ($client_id == $id)
-                    if ($new == '0')
-                        $new = '1';
-                    else
-                        if ($new == 'false')
-                            $new = 'true';
-
+                    if ($new == 0)
+                        $new = 1;
+					
                 $new_data_array[] = array ($client_id, $distance, $new);
 
             }
@@ -70,7 +68,6 @@ if ($_POST['option'] == 'save_distance') {
         $distance_file = Controller::$distance_file_linux;
     else
         $distance_file = Controller::$distance_file_windows_2;
-
 
     file_put_contents ($distance_file, $_POST['distance']);
 

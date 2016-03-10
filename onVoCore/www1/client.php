@@ -1,26 +1,22 @@
 <?
 
-ini_set('display_errors',1);
-error_reporting(-1);
+//ini_set('display_errors',1);
+//error_reporting(-1);
 
 include 'rest/Controller.class.php';
 
-
-//ADD Client
+//ADD
 
 if ($_POST['option'] == 'add') {
 
     $id         = str_replace (':', '',$_POST['client_id']);
+	$check_id   = $_POST['client_id'];
     $name       = $_POST['name'];
     $phone      = $_POST['phone'];
     $image_data = $_POST['image_data'];
 
     $image_name         = $id.'_'.$name.'_'.$phone.'.jpeg';
     $image_path         = Controller::$image_path.'/'.$image_name;
-
-	//if (!file_exisits(Controller::$image_path){
-	//	mkdir(Controller::$image_path , 0777, true);
-	//}
 
     //remove old image/
 	foreach (glob (Controller::$image_path.'/'.$id.'_*_*.*') as $file)
@@ -47,19 +43,16 @@ if ($_POST['option'] == 'add') {
             if (($handle = fopen ($db_file, "r")) !== false) {
 
                 while (($data = fgetcsv ($handle, 1000, "|")) !== false) {
-		    $client_id_compl= $data[0];
-                    $client_id  = substr (str_replace (':', '', $data[0]), -4);;
+
+                    $client_id  = $data[0];
                     $distance   = $data[1];
                     $new        = $data[2];
 
-                    if ($client_id == $id)
-                        if ($new == '1')
-                            $new = '0';
-                        else
-                        if ($new == 'true')
-                            $new = 'false';
+                    if ($client_id == $check_id)
+                        if ($new == 1)
+                            $new = 0;
 
-                    $new_data_array[] = array ($client_id_compl, $distance, $new);
+                    $new_data_array[] = array ($client_id, $distance, $new);
 
                 }
 
