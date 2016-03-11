@@ -90,7 +90,7 @@
                 <h1 ng-if="!client.image">
 
                     <small>ID:</small>
-                   {{ client.id.substr (8).replace (':', '') }}
+                   {{ client.id }}
 
                 </h1>
 
@@ -100,7 +100,7 @@
                     {{ client.name }}
 
                    <small>
-                        ID: <strong>{{ client.id.substr (8).replace (':', '') }}</strong><br>
+                        ID: <strong>{{ client.id }}</strong><br>
                         present: <strong>{{ client.distance == 0 ? 'LOST' : 'OK' }}</strong><br>
                         Phone No.: <a href="tel://{{ client.phone }}">{{ client.phone }}</a>
                     </small>
