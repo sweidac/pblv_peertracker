@@ -107,8 +107,12 @@ while True:
 					inRange = isInRange(signal)
 				else:
 					inRange = 0
+				
+				print(str(inRange))
+				print(int(isNewClient))
 
-				if(inRange == 0 and isNewClient == 0):
+				if(inRange==0 and int(isNewClient)==0):
+					print("beep")
 					thread.start_new_thread(notify, ())
 
 				# build string representation of a station in database
@@ -125,6 +129,7 @@ while True:
 		# remove blank lines
 		newData = newData.rstrip()
 		newData = os.linesep.join([s for s in newData.splitlines() if s])
+		newData = newData + "\n"
 		print("---")
 		print(newData)
 		print("---")

@@ -90,7 +90,7 @@
                 <h1 ng-if="!client.image">
 
                     <small>ID:</small>
-                    {{ client.id }}
+                   {{ client.id }}
 
                 </h1>
 
@@ -99,7 +99,7 @@
 
                     {{ client.name }}
 
-                    <small>
+                   <small>
                         ID: <strong>{{ client.id }}</strong><br>
                         present: <strong>{{ client.distance == 0 ? 'LOST' : 'OK' }}</strong><br>
                         Phone No.: <a href="tel://{{ client.phone }}">{{ client.phone }}</a>
@@ -117,7 +117,7 @@
 
                 <button type="button" class="btn btn-default btn-lg"
                         ng-if="client.image && client.distance != 0"
-                        ng-click="delete_client (client.image)">
+                        ng-click="delete_client (client.image, client.id)">
 
                     <span class="glyphicon glyphicon-remove"></span>
 
