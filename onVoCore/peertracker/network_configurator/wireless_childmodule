@@ -16,6 +16,6 @@ config wifi-iface
 	option device 'radio0'
 	option mode 'sta'
 	option network 'wwan'
-	option bssid 'B8:D8:12:66:18:66'
+
 
 
