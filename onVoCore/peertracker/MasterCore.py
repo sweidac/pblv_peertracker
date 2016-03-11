@@ -123,7 +123,7 @@ while True:
 		for key in dataDict:
 			missingStationRep = key + "|" + str(0) + "|" + dataDict[key] + "\n"
 			newData = newData + missingStationRep
-			if dataDict[key] == 1:
+			if(int(dataDict[key])==0):
 				thread.start_new_thread(notify, ())
 
 		# remove blank lines
