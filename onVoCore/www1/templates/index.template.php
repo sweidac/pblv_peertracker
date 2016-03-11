@@ -90,7 +90,6 @@
                 <h1 ng-if="!client.image">
 
                     <small>ID:</small>
-                   {{ client.id.substr (8).replace (':', '') }}
 
                 </h1>
 

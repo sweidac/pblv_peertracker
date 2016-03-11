@@ -19,8 +19,8 @@ if (file_exists ($db_file))
     if (($handle = fopen ($db_file, "r")) !== false)
         while (($data = fgetcsv ($handle, 1000, "|")) !== false) {
 
-            $id         = substr (str_replace (':', '', $data[0]), -4);;
-            $image_id   = $id;
+            $id         = $data[0];
+            $image_id   = str_replace (':', '', $data[0]);
             $distance   = $data[1];
             $name       = null;
             $image      = null;
